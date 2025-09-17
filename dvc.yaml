@@ -1,0 +1,9 @@
+stages:
+  train:
+    cmd: python src/train.py --csv data/dataset.csv
+    deps:
+      - src/train.py
+      - src/preprocess.py
+      - data/dataset.csv
+    outs:
+      - models/rf_model.pkl
