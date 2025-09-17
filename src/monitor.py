@@ -1,44 +1,57 @@
-import time, re, requests
-from collections import deque
+import time
+import smtplib
+from email.mime.text import MIMEText
 
 LOG_FILE = "predictions.log"
-THRESHOLD = 0.5
-WINDOW_LINES = 20
-CHECK_INTERVAL = 10
-WEBHOOK_URL = ""  # set to your webhook
+ERROR_THRESHOLD = 3       # Trigger alert if >= 3 errors in the interval
+CHECK_INTERVAL = 10       # Seconds between checks
 
-def tail(filepath):
-    with open(filepath, "r") as f:
-        f.seek(0,2)
-        while True:
-            line = f.readline()
-            if not line:
-                time.sleep(1)
-                continue
-            yield line
+# Email configuration
+EMAIL_FROM = "amaanpatel038@gmail.com"
+EMAIL_PASSWORD = "orvl ckqg skqy cnzo"  # Use Gmail App Password
+EMAIL_TO = "amaanpatel038@gmail.com"
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
 
-def send_alert(summary):
-    if not WEBHOOK_URL:
-        print("ALERT would be sent but WEBHOOK_URL is empty: ", summary)
-        return
-    payload = {"text": f"ALERT: High error rate detected: {summary}"}
-    requests.post(WEBHOOK_URL, json=payload, timeout=5)
+def send_email_alert(error_count):
+    msg = MIMEText(
+        f"⚠️ Alert! High error rate detected: {error_count} errors in the last {CHECK_INTERVAL} seconds."
+    )
+    msg["Subject"] = "MLOps Capstone Prediction Service Alert"
+    msg["From"] = EMAIL_FROM
+    msg["To"] = EMAIL_TO
 
-def monitor():
-    buf = deque(maxlen=WINDOW_LINES)
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(EMAIL_FROM, EMAIL_PASSWORD)
+            server.send_message(msg)
+            print("Alert email sent!")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
+def monitor_log():
+    last_size = 0
     while True:
         try:
-            for line in tail(LOG_FILE):
-                buf.append(line)
-                if len(buf) >= WINDOW_LINES:
-                    errs = sum(1 for l in buf if re.match(r".*ERR.*", l))
-                    frac = errs / len(buf)
-                    if frac > THRESHOLD:
-                        send_alert({"error_count": errs, "total": len(buf), "fraction": frac})
-                        buf.clear()
+            with open(LOG_FILE, "r") as f:
+                f.seek(last_size)
+                lines = f.readlines()
+                last_size = f.tell()
+
+            # Count errors in new log lines
+            error_count = sum(1 for line in lines if "ERROR" in line)
+
+            if error_count >= ERROR_THRESHOLD:
+                send_email_alert(error_count)
+
         except FileNotFoundError:
-            time.sleep(2)
-            continue
+            print("Log file not found. Waiting...")
+        except Exception as e:
+            print(f"Monitoring error: {e}")
+
+        time.sleep(CHECK_INTERVAL)
 
 if __name__ == "__main__":
-    monitor()
+    print("Starting log monitoring...")
+    monitor_log()

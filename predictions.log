@@ -1,0 +1,10 @@
+2025-09-17 10:13:27,816 - ERROR - ERROR - Validation failed - Input: b'{"wrong_key": "bad"}' - [{'type': 'missing', 'loc': ('body', 'features'), 'msg': 'Field required', 'input': {'wrong_key': 'bad'}}]
+2025-09-17 10:13:41,638 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
+2025-09-17 10:13:51,870 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
+2025-09-17 10:13:53,250 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
+2025-09-17 10:13:54,028 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
+2025-09-17 10:13:54,655 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
+2025-09-17 10:16:04,941 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
+2025-09-17 10:16:05,808 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
+2025-09-17 10:16:06,451 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
+2025-09-17 10:16:06,982 - ERROR - ERROR - Input: [1, 2] - Exception: X has 2 features, but RandomForestClassifier is expecting 4 features as input.
