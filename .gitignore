@@ -1,11 +1,43 @@
+# Python
 __pycache__/
-.venv/
-.dvc/
-mlruns/
 *.pyc
-.pytest_cache/
-.DS_Store
+*.pyo
+*.pyd
+*.pytest_cache/
+.venv/
+.env
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+
+# Data versioning
+.dvc/
+*.dvc
+.dvcignore
+
+# MLflow
+mlruns/
+*.log
+
+# Terraform
 .terraform/
 *.tfstate
 *.tfstate.backup
-*.log
+*.tfvars
+*.tfplan
+*.terraform.lock.hcl
+
+# Docker
+*.env
+*.dockerignore
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+predictions.log
+
+# Models
+models/*.pkl
+mlruns/**/artifacts/model*
