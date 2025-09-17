@@ -5,3 +5,7 @@ mlruns/
 *.pyc
 .pytest_cache/
 .DS_Store
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.log
